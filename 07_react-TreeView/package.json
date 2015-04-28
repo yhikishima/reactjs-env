@@ -1,0 +1,22 @@
+{
+  "name": "react-TreeView",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "debowerify": "^1.2.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-load-plugins": "^0.10.0",
+    "react": "^0.13.2",
+    "reactify": "^1.1.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
