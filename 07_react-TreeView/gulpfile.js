@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 var $    = require('gulp-load-plugins')();
 
-gulp.task.('clean', function(cb) {
+gulp.task('clean', function(cb) {
   var del = require('del');
   del(['./dist']);
   cb();
@@ -27,7 +27,6 @@ gulp.task('build', function() {
     .pipe( $.uglify() )
     .pipe( $.sourcemaps.write( './' ) )
     .pipe( gulp.dest( './src/js' ) );
-
 });
 
 gulp.task('watch', ['build'], function() {
