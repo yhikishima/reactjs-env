@@ -1,0 +1,17 @@
+{
+  "name": "react-TreeView",
+  "version": "1.0.0",
+  "homepage": "",
+  "authors": [
+    "yhikishima"
+  ],
+  "description": "",
+  "main": "index.html",
+  "keywords": [
+    "React.js"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "normalize.css": "~3.0.3"
+  }
+}
