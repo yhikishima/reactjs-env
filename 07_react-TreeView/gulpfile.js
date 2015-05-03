@@ -8,7 +8,7 @@ gulp.task('clean', function(cb) {
   cb();
 });
 
-gulp.task('build', function() {
+gulp.task('js', function() {
   var browserify = require('browserify');
   var source     = require( 'vinyl-source-stream' );
   var buffer     = require( 'vinyl-buffer' );
@@ -29,19 +29,41 @@ gulp.task('build', function() {
     .pipe( gulp.dest( './src/js' ) );
 });
 
+gulp.task( 'copy', [ 'build', 'clean' ], function() {
+  return gulp.src(
+      [ 'src/fonts/**', 'src/js/app.js' ],
+      { base: 'src' }
+    )
+    .pipe( gulp.dest( 'dist' ) );
+} );
+
+gulp.task( 'release', [ 'copy' ], function() {
+  var assets = $.useref.assets();
+  gulp.src( './src/*.html' )
+    .pipe( assets )
+    .pipe( $.if( '*.css', $.minifyCss() ) )
+    .pipe( assets.restore() )
+    .pipe( $.useref() )
+    .pipe( gulp.dest( './dist' ) );
+} );
+
 gulp.task('watch', ['build'], function() {
   gulp.watch([
     './src/js/*.js',
     '!./src/js/app.js'
-  ], [ 'build' ]);
+  ], [ 'js' ]);
 });
+
+gulp.task( 'build', [ 'js' ] );
 
 gulp.task('serve', ['watch'], function() {
-  var connect     = require( 'connect' );
-  var serveStatic = require( 'serve-static' );
-  var app = connect();
-  app.use( serveStatic( __dirname ) );
-  app.listen( 8080 );
+  var connect = require('gulp-connect');
+  connect.server({
+    root: 'dist',
+    port: 7000,
+    livereload: true
+  });
+
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', ['watch']);
