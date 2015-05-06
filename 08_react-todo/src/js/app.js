@@ -1,50 +1,44 @@
-// app.js
-var todos = [{
-  id: '_1',
-  name: 'Buy some milk',
-  done: true
-},{
-  id: '_2',
-  name: 'Birthday present to Alice',
-  done: false
-}];
-
-var Todo = React.createClass({
-  render: function() {
-    var todo = this.props.todo;
-    return (<li>{todo.name}<button>Done</button></li>);
-  }
-});
 
 var TodoList = React.createClass({
+  createItem: function(itemText) {
+    return <li>{itemText} [<a href="#" onClick={this.props.handleDelete.bind(this, itemText)}>x</a>]</li>;
+  },
+
   render: function() {
-    var rows = this.props.todos.filter(function(todo) {
-      return !todo.done;
-    }).map(function(todo) {
-      return (<Todo key={todo.id} todo={todo}></Todo>);
-    });
-    return (
-      <div className="active-todos">
-        <h2>Active</h2>
-        <ul>{rows}</ul>
-      </div>
-    );
+    return <ul>{this.props.items.map(this.createItem)}</ul>;
   }
 });
 
-var App = React.createClass({
+var TodoApp = React.createClass({
+  getInitialState: function() {
+    return {items: [], text: ''};
+  },
+  handleDelete: function(itemToDelete, e) {
+    var newItems = _.reject(this.state.items, function(item) {
+      return item == itemToDelete
+    });
+    this.setState({items: newItems});
+  },
+  handleChange: function(e) {
+    this.setState({text: e.target.value});
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var nextItems = this.state.items.concat([this.state.text]);
+    var nextText = '';
+    this.setState({items: nextItems, text: nextText});
+  },
   render: function() {
     return (
       <div>
-        <h1>My Todo</h1>
-        <TodoList todos={todos}/>
+        <h3>TODO</h3>
+        <TodoList items={this.state.items} handleDelete={this.handleDelete} />
+        <form onSubmit={this.handleSubmit}>
+          <input onChange={this.handleChange} value={this.state.text} />
+          <button>{'Add #' + (this.state.items.length + 1)}</button>
+        </form>
       </div>
     );
   }
 });
-
-
-React.render(
-  <App></App>,
-  document.getElementById('app-container')
-);
+React.render(<TodoApp />, document.getElementById('app-container'));
