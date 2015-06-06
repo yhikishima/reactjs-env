@@ -3,22 +3,37 @@ var React = require('react');
 var Component = React.createClass({
   getInitialState: function() {
     return {
-      text: '',
-      messages: []
+      ttlText: '',
+      contentText: '',
+      ttlMessages: ['aaaa'],
+      contentMessages: [],
     }
   },
 
   onTextChanged: function() {
     this.setState({
-      text: this.refs.text.getDOMNode().value,
-      messages: this.state.messages
+      ttlText: this.refs.title.getDOMNode().value,
+      ttlMessages: this.state.ttlMessages
+    });
+  },
+
+  onContentTextChanged: function() {
+    this.setState({
+      contentText: this.refs.contents.getDOMNode().value,
+      contentMessages: this.state.contentMessages
     });
   },
 
   onButtonClicked: function() {
     this.setState({
-      text: '',
-      messages: this.state.messages.concat([this.state.text])
+      ttlText: '',
+      contentText: '',
+      ttlMessages: this.state.ttlMessages.concat([
+        this.state.ttlText
+      ]),
+      contentMessages: this.state.contentMessages.concat([
+        this.state.contentText
+      ])
     });
   },
 
@@ -27,17 +42,28 @@ var Component = React.createClass({
       <div id="js-todoInput" class="todoInput">
 
         <p>TODOタイトル：</p>
-        <input type="text" class="" ref="text"
+        <input type="text" class="" ref="title"
           value={this.state.text}
           onChange={this.onTextChanged} />
+
+        <p>TODO内容：</p>
+        <input type="text" class="" ref="contents"
+          value={this.state.text}
+          onChange={this.onContentTextChanged} />
 
         <button onClick={this.onButtonClicked}>
           追加
         </button>
-        { this.state.messages.map(function(m, i) {
-          return <div key={i}>{m}</div>
-        }) }
+        {
+          this.state.ttlMessages.map(function(m, i) {
+            return
+              <dl>
+                <dt key={i}>{m}</dt><dd>aaa</dd>
+              </dl>
+          })
+        }
       </div>
+
     );
   }
 });

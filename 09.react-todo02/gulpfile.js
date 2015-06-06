@@ -2,17 +2,25 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var browserSync = require('browser-sync');
 var source = require("vinyl-source-stream");
+var buffer = require( 'vinyl-buffer' );
 var stylus = require('gulp-stylus');
 var plumber = require('gulp-plumber');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
 var reactify = require('reactify');
 
 gulp.task('browserify', function(){
   var b = browserify({
     entries: ['./src/js/app.js'],
-    transform: [reactify]
+    transform: [reactify],
+    debug: true
   });
   return b.bundle()
     .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./dist/js/'));
 });
 
@@ -42,8 +50,8 @@ gulp.task('stylus', function() {
   return gulp.src([
       './src/css/!(_)*.styl'
     ])
-    .pipe( plumber() )
-    .pipe( stylus( {
+    .pipe(plumber())
+    .pipe(stylus( {
       compress: true
     }))
     .pipe( gulp.dest('./dist/css/') );
